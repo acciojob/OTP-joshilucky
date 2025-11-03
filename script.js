@@ -1,91 +1,51 @@
-const codes = document.querySelectorAll('.code');
+// Ensure the script only runs once
+if (!window.__otp_initialized) {
+  window.__otp_initialized = true;
 
-// Focus the first field when the page loads
-codes[0].focus();
+  const codeInputs = document.querySelectorAll('.code');
 
-codes.forEach((input, index) => {
-  input.addEventListener('input', (e) => {
-    const value = e.target.value;
-    if (/[^0-9]/.test(value)) {
-      // Only numbers allowed
-      e.target.value = '';
-      return;
-    }
+  // Focus first input
+  codeInputs[0].focus();
 
-    if (value && index < codes.length - 1) {
-      codes[index + 1].focus();
-    }
-  });
-
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Backspace') {
-      if (input.value === '' && index > 0) {
-        codes[index - 1].focus();
-        codes[index - 1].value = '';
-      } else {
-        input.value = '';
+  codeInputs.forEach((input, index) => {
+    input.addEventListener('input', (e) => {
+      const value = e.target.value;
+      if (/[^0-9]/.test(value)) {
+        e.target.value = '';
+        return;
       }
-    }
-  });
 
-  // Allow user to paste full OTP
-  input.addEventListener('paste', (e) => {
-    e.preventDefault();
-    const pasteData = e.clipboardData.getData('text').trim();
-    if (!/^\d+$/.test(pasteData)) return;
-    const digits = pasteData.split('');
-    digits.forEach((digit, i) => {
-      if (codes[index + i]) {
-        codes[index + i].value = digit;
+      if (value && index < codeInputs.length - 1) {
+        codeInputs[index + 1].focus();
       }
     });
-    const nextIndex = index + digits.length >= codes.length ? codes.length - 1 : index + digits.length;
-    codes[nextIndex].focus();
-  });
-});
-//your JS code here. If required.
-const codes = document.querySelectorAll('.code');
 
-// Focus the first field when the page loads
-codes[0].focus();
-
-codes.forEach((input, index) => {
-  input.addEventListener('input', (e) => {
-    const value = e.target.value;
-    if (/[^0-9]/.test(value)) {
-      // Only numbers allowed
-      e.target.value = '';
-      return;
-    }
-
-    if (value && index < codes.length - 1) {
-      codes[index + 1].focus();
-    }
-  });
-
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Backspace') {
-      if (input.value === '' && index > 0) {
-        codes[index - 1].focus();
-        codes[index - 1].value = '';
-      } else {
-        input.value = '';
-      }
-    }
-  });
-
-  // Allow user to paste full OTP
-  input.addEventListener('paste', (e) => {
-    e.preventDefault();
-    const pasteData = e.clipboardData.getData('text').trim();
-    if (!/^\d+$/.test(pasteData)) return;
-    const digits = pasteData.split('');
-    digits.forEach((digit, i) => {
-      if (codes[index + i]) {
-        codes[index + i].value = digit;
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace') {
+        if (input.value === '' && index > 0) {
+          codeInputs[index - 1].focus();
+          codeInputs[index - 1].value = '';
+        } else {
+          input.value = '';
+        }
       }
     });
-    const nextIndex = index + digits.length >= codes.length ? codes.length - 1 : index + digits.length;
-    codes[nextIndex].focus();
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasteData = e.clipboardData.getData('text').trim();
+      if (!/^\d+$/.test(pasteData)) return;
+      const digits = pasteData.split('');
+      digits.forEach((digit, i) => {
+        if (codeInputs[index + i]) {
+          codeInputs[index + i].value = digit;
+        }
+      });
+      const nextIndex =
+        index + digits.length >= codeInputs.length
+          ? codeInputs.length - 1
+          : index + digits.length;
+      codeInputs[nextIndex].focus();
+    });
   });
-});
+}
